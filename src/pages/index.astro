@@ -1,7 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
+import { hornPaths } from '../data/horn';
+const horn = JSON.stringify(hornPaths().map((c) => c.d));
 ---
 
 <Base>
   <main><h1>Ezra Kiplimo</h1></main>
+  <script type="application/json" id="horn" set:html={horn} />
 </Base>
