@@ -37,13 +37,40 @@ export const site = {
   cgan: {
     title: 'Sharper rain from coarse forecasts',
     project: 'SEWAA · Strengthening Early Warning Systems for Anticipatory Action',
-    summary:
-      'Global forecasts see rain in blurry, coarse blocks. For SEWAA I retrained a conditional GAN (WGAN-GP) that takes ECMWF IFS ensemble forecasts and generates high-resolution, probabilistic rainfall for the ICPAC region, this time learning from RFE2 daily satellite rainfall instead of IMERG.',
-    points: [
-      '8 input channels: total precipitation, 2 m temperature, total column water vapour and surface pressure, each as ensemble mean and spread',
-      'Elevation and land-sea mask as constant fields',
-      'Trained on 2018–2021, tested on 2023 onwards, scored with CRPS and RMSE',
-      'Rebuilt the data pipeline for daily RFE2 files, regridded cell-for-cell onto the forecast grid',
+    // One step per map stage; the map sharpens as each step scrolls past.
+    stages: [
+      {
+        k: 10,
+        label: '1.0°',
+        km: '~110 km',
+        note: 'coarse forecast',
+        heading: 'Forecasts arrive blurry',
+        text: 'Global forecast models see the Horn of Africa in coarse, smoothed blocks. A farmer or a disaster office needs to know where heavy rain will fall, not just roughly which region.',
+      },
+      {
+        k: 5,
+        label: '0.5°',
+        km: '~55 km',
+        note: 'still blurry',
+        heading: 'A GAN that learns what rain looks like',
+        text: 'For SEWAA I retrained a conditional GAN (WGAN-GP). It reads ECMWF IFS ensemble forecasts as 8 channels: total precipitation, 2 m temperature, total column water vapour and surface pressure, each as ensemble mean and spread, plus elevation and a land-sea mask.',
+      },
+      {
+        k: 2,
+        label: '0.2°',
+        km: '~22 km',
+        note: 'structure appears',
+        heading: 'Taught by satellites',
+        text: 'Instead of IMERG, this version learns from RFE2 daily satellite rainfall. I rebuilt the data pipeline for daily files, regridded them cell-for-cell onto the forecast grid, trained on 2018–2021 and tested on 2023 onwards, scored with CRPS and RMSE.',
+      },
+      {
+        k: 1,
+        label: '0.1°',
+        km: '~11 km',
+        note: 'cGAN sample',
+        heading: 'Sharp, probabilistic rain',
+        text: 'The generator adds realistic small-scale structure and produces an ensemble of samples, so forecasters see both where rain is likely and how uncertain it is.',
+      },
     ],
     facts: [
       ['Grid', '384 × 352 cells'],
@@ -51,12 +78,6 @@ export const site = {
       ['Domain', '11 countries'],
       ['Model', 'cGAN · WGAN-GP'],
     ] as [string, string][],
-    stages: [
-      { k: 10, label: '1.0°', km: '~110 km', note: 'coarse forecast' },
-      { k: 5, label: '0.5°', km: '~55 km', note: 'still blurry' },
-      { k: 2, label: '0.2°', km: '~22 km', note: 'structure appears' },
-      { k: 1, label: '0.1°', km: '~11 km', note: 'cGAN sample' },
-    ],
     repo: 'https://github.com/limoezra/SEWAA-forecasts-RFE2',
   },
 

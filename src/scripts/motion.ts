@@ -10,7 +10,7 @@ export { gsap, ScrollTrigger };
 export const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const $$ = (sel: string, root: ParentNode = document) => [...root.querySelectorAll<HTMLElement>(sel)];
-const GLYPHS = '░▒▓█▚▞01';
+const GLYPHS = '.:+=*#%01';
 let started = false;
 
 export function initMotion() {
@@ -22,7 +22,12 @@ export function initMotion() {
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
-  document.fonts.ready.then(() => ScrollTrigger.refresh());
+  document.fonts.ready.then(() => {
+    ScrollTrigger.refresh();
+    // Honour deep links like #contact once layout has settled.
+    const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (target) lenis.scrollTo(target, { immediate: true, offset: -60 });
+  });
 
   intro();
   scramble();

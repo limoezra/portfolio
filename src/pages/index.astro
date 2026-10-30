@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
+import Downscale from '../components/Downscale.astro';
 import { hornPaths } from '../data/horn';
 
 const horn = JSON.stringify(hornPaths().map((c) => c.d));
@@ -14,6 +15,7 @@ const horn = JSON.stringify(hornPaths().map((c) => c.d));
   <main id="main">
     <Hero />
     <About />
+    <Downscale />
   </main>
   <script type="application/json" id="horn" set:html={horn} />
 </Base>
