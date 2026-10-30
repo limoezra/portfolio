@@ -1,0 +1,98 @@
+---
+import { site } from '../data/site';
+---
+
+<section class="section wrap" id="work">
+  <p class="eyebrow">More work</p>
+  <h2 class="h2" data-scramble>Models, data and the web</h2>
+  <div class="grid" data-stagger>
+    {
+      site.projects.map((p, i) => (
+        <article class="card">
+          <div class={`strip s${i}`} aria-hidden="true" />
+          <div class="body">
+            <p class="year mono">{p.year}</p>
+            <h3>{p.title}</h3>
+            <p class="text">{p.text}</p>
+            <div class="tags">
+              {p.tags.map((t) => (
+                <span class="chip">{t}</span>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .h2 {
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  article {
+    overflow: hidden;
+    transition: transform 0.4s var(--ease), border-color 0.3s;
+  }
+  article:hover {
+    transform: translateY(-4px);
+    border-color: var(--line-2);
+  }
+  /* A strip of "rain pixels" per card, each in its own slice of the ramp */
+  .strip {
+    height: 64px;
+    background-image:
+      repeating-linear-gradient(90deg, var(--bg-2) 0 1px, transparent 1px 12px),
+      repeating-linear-gradient(0deg, var(--bg-2) 0 1px, transparent 1px 12px),
+      linear-gradient(100deg, var(--a), var(--b));
+    opacity: 0.85;
+    transition: background-position 1.2s var(--ease);
+  }
+  article:hover .strip {
+    background-position: 24px 0, 0 0, 0 0;
+  }
+  .s0 {
+    --a: #3fd0f0;
+    --b: #2a7de1;
+  }
+  .s1 {
+    --a: #2a7de1;
+    --b: #8b5cf6;
+  }
+  .s2 {
+    --a: #8b5cf6;
+    --b: #e879f9;
+  }
+  .body {
+    padding: 22px 22px 24px;
+  }
+  .year {
+    font-size: 0.75rem;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  h3 {
+    font-size: 1.3rem;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .text {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

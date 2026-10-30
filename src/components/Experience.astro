@@ -1,0 +1,188 @@
+---
+import { site } from '../data/site';
+const { experience, education, certifications } = site;
+---
+
+<section class="section wrap" id="experience">
+  <p class="eyebrow">Experience</p>
+  <h2 class="h2" data-scramble>Where the data took me</h2>
+
+  <ol class="timeline">
+    {
+      experience.map((e) => (
+        <li>
+          <span class="drop" data-drop aria-hidden="true" />
+          <p class="when mono">{e.when}</p>
+          <div class="what">
+            <h3>{e.role}</h3>
+            <p class="org">
+              {e.org} · {e.place}
+            </p>
+            <ul>
+              {e.points.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="edu">
+    <div data-reveal>
+      <h3 class="sub">Education</h3>
+      <ul class="plain">
+        {
+          education.map((e) => (
+            <li>
+              <b>{e.title}</b>
+              <span>
+                {e.org} · {e.when}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div data-reveal>
+      <h3 class="sub">Certifications</h3>
+      <ul class="plain">{certifications.map((c) => <li>{c}</li>)}</ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .h2 {
+    margin-bottom: clamp(36px, 5vw, 64px);
+  }
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  /* The gauge line the drops fall onto */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 200px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(var(--accent), var(--accent-2) 60%, transparent);
+    opacity: 0.6;
+  }
+  .timeline > li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    padding-bottom: 40px;
+  }
+  .when {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 4px 0 0;
+    padding-right: 28px;
+  }
+  .what {
+    padding-left: 36px;
+  }
+  .drop {
+    position: absolute;
+    left: 194px;
+    top: 4px;
+    width: 13px;
+    height: 13px;
+    background: var(--accent);
+    border-radius: 50% 0 50% 50%;
+    transform: rotate(-45deg);
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+  /* Ripple when the drop lands */
+  .drop::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    opacity: 0;
+  }
+  .drop:global(.splash)::after {
+    animation: ripple 0.9s var(--ease) forwards;
+  }
+  @keyframes ripple {
+    from {
+      transform: scale(0.6);
+      opacity: 0.9;
+    }
+    to {
+      transform: scale(3);
+      opacity: 0;
+    }
+  }
+  h3 {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+  .org {
+    color: var(--accent);
+    font-size: 0.95rem;
+    margin: 4px 0 10px;
+  }
+  .what ul {
+    margin: 0;
+    padding-left: 1.1em;
+    color: var(--muted);
+  }
+  .what li {
+    margin-bottom: 4px;
+  }
+  .edu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: clamp(32px, 5vw, 64px);
+    padding-top: clamp(32px, 5vw, 48px);
+    border-top: 1px solid var(--line);
+  }
+  .sub {
+    font-size: 1.15rem;
+    margin-bottom: 16px;
+  }
+  .plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+    color: var(--muted);
+  }
+  .plain b {
+    display: block;
+    color: var(--fg);
+    font-weight: 600;
+  }
+  @media (max-width: 760px) {
+    .timeline::before {
+      left: 6px;
+    }
+    .timeline > li {
+      grid-template-columns: 1fr;
+      padding-left: 30px;
+    }
+    .drop {
+      left: 0;
+    }
+    .when {
+      padding: 0;
+      margin-bottom: 4px;
+    }
+    .what {
+      padding-left: 0;
+    }
+    .edu {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

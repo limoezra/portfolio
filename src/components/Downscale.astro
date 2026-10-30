@@ -1,0 +1,228 @@
+---
+import { site } from '../data/site';
+const { cgan } = site;
+const stageData = JSON.stringify(cgan.stages.map(({ k, label, note }) => ({ k, label, note })));
+---
+
+<section class="section ds" id="research" data-stages={stageData}>
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow">Research · 01</p>
+      <h2 class="h2" data-scramble>{cgan.title}</h2>
+      <p class="lede">{cgan.project}</p>
+    </header>
+
+    <div class="grid">
+      <figure class="stick">
+        <div class="frame">
+          <canvas class="map" data-ds-map role="img" aria-label="Rainfall map shown at the resolution of the current step"></canvas>
+          <p class="note mono" aria-live="polite"><span data-ds-label>{cgan.stages[0].label}</span> · <span data-ds-note>{cgan.stages[0].note}</span></p>
+        </div>
+        <div class="chips" role="group" aria-label="Map resolution">
+          {
+            cgan.stages.map((s, i) => (
+              <button type="button" class="chip" data-ds-chip={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+                {s.label} <span>{s.km}</span>
+              </button>
+            ))
+          }
+        </div>
+      </figure>
+
+      <ol class="steps">
+        {
+          cgan.stages.map((s, i) => (
+            <li data-ds-step={i}>
+              <span class="num mono">0{i + 1} · {s.label}</span>
+              <h3>{s.heading}</h3>
+              <p>{s.text}</p>
+              {i === cgan.stages.length - 1 && (
+                <>
+                  <dl class="facts">
+                    {cgan.facts.map(([k, v]) => (
+                      <div>
+                        <dt class="mono">{k}</dt>
+                        <dd>{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <a class="btn" href={cgan.repo} target="_blank" rel="noopener">
+                    Code on GitHub <span aria-hidden="true">↗</span>
+                  </a>
+                </>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { mountDownscale } from '../scripts/rain';
+
+  const stages: { k: number; label: string; note: string }[] = JSON.parse(
+    document.querySelector<HTMLElement>('[data-stages]')!.dataset.stages!,
+  );
+  const ds = mountDownscale(
+    document.querySelector<HTMLCanvasElement>('[data-ds-map]')!,
+    stages.map((s) => s.k),
+  );
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-ds-chip]')];
+  const steps = [...document.querySelectorAll<HTMLElement>('[data-ds-step]')];
+  const label = document.querySelector('[data-ds-label]')!;
+  const note = document.querySelector('[data-ds-note]')!;
+
+  const show = (i: number) => {
+    ds.setStage(i);
+    label.textContent = stages[i].label;
+    note.textContent = stages[i].note;
+    chips.forEach((c, j) => c.setAttribute('aria-pressed', String(i === j)));
+    steps.forEach((s, j) => s.classList.toggle('on', i === j));
+  };
+  chips.forEach((c, i) => c.addEventListener('click', () => show(i)));
+
+  // The step crossing the middle of the screen picks the stage.
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => e.isIntersecting && show(Number((e.target as HTMLElement).dataset.dsStep))),
+    { rootMargin: '-45% 0px -45% 0px' },
+  );
+  steps.forEach((s) => io.observe(s));
+  show(0);
+</script>
+
+<style>
+  .head {
+    margin-bottom: clamp(40px, 6vw, 72px);
+  }
+  .head .h2 {
+    margin-bottom: 16px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+  .stick {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+    margin: 0;
+    order: 2;
+  }
+  .frame {
+    position: relative;
+  }
+  canvas {
+    width: 100%;
+    max-height: calc(100svh - var(--nav-h) - 140px);
+    aspect-ratio: 352 / 384;
+    object-fit: contain;
+  }
+  .note {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    font-size: 0.78rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    color: var(--accent);
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .chips .chip {
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .chips .chip span {
+    opacity: 0.65;
+  }
+  .chips .chip[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .steps li {
+    min-height: 72svh;
+    padding-block: 24px;
+    opacity: 0.35;
+    transition: opacity 0.5s var(--ease);
+  }
+  .steps li:last-child {
+    min-height: 0;
+  }
+  .steps li.on {
+    opacity: 1;
+  }
+  .num {
+    font-size: 0.78rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+  h3 {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    margin: 10px 0 16px;
+  }
+  .steps p {
+    color: var(--muted);
+    font-size: 1.06rem;
+    max-width: 48ch;
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 24px;
+    margin: 28px 0 32px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .facts dt {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+  .facts dd {
+    margin: 4px 0 0;
+    font: 600 1.15rem/1.3 var(--f-display);
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    /* Map stays at the top while the steps scroll underneath. */
+    .stick {
+      order: 0;
+      top: var(--nav-h);
+      z-index: 2;
+      background: var(--bg);
+      padding-block: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    canvas {
+      max-height: 38svh;
+    }
+    .chips {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+    .steps li {
+      min-height: 60svh;
+    }
+  }
+</style>

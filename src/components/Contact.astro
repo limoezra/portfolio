@@ -1,0 +1,78 @@
+---
+import { site } from '../data/site';
+const { profile } = site;
+---
+
+<section class="section wrap contact" id="contact">
+  <p class="eyebrow">Contact</p>
+  <h2 class="big" data-scramble>Let's forecast something together</h2>
+  <p class="lede">
+    Open to research collaborations, climate and early-warning projects, and roles in machine learning for climate and GIS.
+  </p>
+  <div class="row">
+    <button class="btn primary email" type="button" data-copy={profile.email}>
+      <span data-copy-label>{profile.email}</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>
+    </button>
+    <a class="btn" href={`mailto:${profile.email}`}>Write an email</a>
+    <a class="btn" href={profile.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+    <a class="btn" href={profile.github} target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+  <p class="status mono" role="status" aria-live="polite" data-copy-status></p>
+</section>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-copy]')!;
+  const status = document.querySelector('[data-copy-status]')!;
+  btn.addEventListener('click', async () => {
+    const email = btn.dataset.copy!;
+    try {
+      await navigator.clipboard.writeText(email);
+      status.textContent = 'Email copied to clipboard';
+    } catch {
+      location.href = `mailto:${email}`;
+    }
+  });
+</script>
+
+<style>
+  .contact {
+    text-align: left;
+  }
+  .big {
+    font-size: clamp(2.6rem, 8vw, 6.4rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    max-width: 14ch;
+    margin-bottom: 28px;
+    background: linear-gradient(120deg, var(--fg) 30%, var(--accent) 70%, var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .lede {
+    margin-bottom: 36px;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .email svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+  .email span {
+    overflow-wrap: anywhere;
+  }
+  .status {
+    min-height: 1.5em;
+    margin-top: 14px;
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+</style>

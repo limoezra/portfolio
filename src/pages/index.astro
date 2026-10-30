@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Downscale from '../components/Downscale.astro';
+import Vulnerability from '../components/Vulnerability.astro';
+import Work from '../components/Work.astro';
+import Publications from '../components/Publications.astro';
+import Experience from '../components/Experience.astro';
+import Toolbox from '../components/Toolbox.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import { hornPaths } from '../data/horn';
+
+// Country outlines in grid coordinates, read once by the map scripts.
+const horn = JSON.stringify(hornPaths().map((c) => c.d));
+---
+
+<Base>
+  <a class="sr-only" href="#main">Skip to content</a>
+  <Nav />
+  <main id="main">
+    <Hero />
+    <About />
+    <Downscale />
+    <Vulnerability />
+    <Work />
+    <Publications />
+    <Experience />
+    <Toolbox />
+    <Contact />
+  </main>
+  <Footer />
+  <script type="application/json" id="horn" set:html={horn} />
+</Base>

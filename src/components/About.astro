@@ -1,0 +1,114 @@
+---
+import { Image } from 'astro:assets';
+import ezra from '../assets/ezra.jpg';
+import { site } from '../data/site';
+const { about } = site;
+---
+
+<section class="section wrap about" id="about">
+  <div class="photo" data-reveal>
+    <Image src={ezra} widths={[360, 720]} sizes="(max-width: 900px) 70vw, 360px" alt="Portrait of Ezra Kiplimo" />
+    <span class="tag mono" aria-hidden="true">EK · 0.1°</span>
+  </div>
+  <div>
+    <p class="eyebrow">About</p>
+    <h2 class="h2" data-scramble>Statistician turned forecaster</h2>
+    <div class="body" data-reveal>
+      {about.paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+    <dl class="facts" data-stagger>
+      {
+        about.facts.map(([k, v]) => (
+          <div>
+            <dt class="mono">{k}</dt>
+            <dd>{v}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .about {
+    display: grid;
+    grid-template-columns: minmax(220px, 360px) 1fr;
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+  .photo {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line-2);
+  }
+  .photo :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    filter: saturate(0.95) contrast(1.02);
+  }
+  /* Pixel-rain border on the photo */
+  .photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(transparent 92%, color-mix(in srgb, var(--accent) 35%, transparent)),
+      repeating-linear-gradient(90deg, transparent 0 11px, color-mix(in srgb, var(--bg) 18%, transparent) 11px 12px);
+    mix-blend-mode: normal;
+    pointer-events: none;
+  }
+  .tag {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    z-index: 1;
+    font-size: 0.7rem;
+    padding: 5px 9px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--bg) 75%, transparent);
+    color: var(--fg);
+  }
+  .h2 {
+    margin-bottom: 28px;
+  }
+  .body {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 62ch;
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 32px 0 0;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .facts div {
+    background: var(--bg);
+    padding: 16px 18px;
+  }
+  .facts dt {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .facts dd {
+    margin: 4px 0 0;
+    font-weight: 500;
+  }
+  @media (max-width: 900px) {
+    .about {
+      grid-template-columns: 1fr;
+    }
+    .photo {
+      max-width: 320px;
+    }
+  }
+</style>
