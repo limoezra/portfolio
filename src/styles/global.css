@@ -211,6 +211,21 @@ p {
   white-space: nowrap;
 }
 
+/* Skip link: hidden until focused from the keyboard */
+.sr-only:focus-visible {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  z-index: 100;
+  width: auto;
+  height: auto;
+  clip: auto;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
 /* Map canvases: crisp pixels */
 .map {
   image-rendering: pixelated;

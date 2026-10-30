@@ -133,7 +133,7 @@ export const site = {
       authors: 'Sabiiti, G., Amdihun, A., Wekesa, K., Igbokwe, V., Kiplimo, E.',
       year: '2026',
       title: 'Towards Anticipatory Disaster Risk Financing and Index Insurance Mechanisms for Resilience Building in Eastern Africa',
-      venue: 'IGAD-ICPAC',
+      venue: '',
     },
   ],
 

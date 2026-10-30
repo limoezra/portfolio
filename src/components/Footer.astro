@@ -1,0 +1,35 @@
+---
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="wrap foot">
+  <p>© {year} {site.profile.fullName}</p>
+  <p class="mono">rain made of noise · {site.profile.coords}</p>
+  <a href="#top">Back to top ↑</a>
+</footer>
+
+<style>
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding-block: 32px 40px;
+    border-top: 1px solid var(--line);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  p {
+    margin: 0;
+  }
+  .mono {
+    font-size: 0.75rem;
+  }
+  a {
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--accent);
+  }
+</style>

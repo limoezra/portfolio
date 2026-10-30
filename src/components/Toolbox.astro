@@ -1,0 +1,84 @@
+---
+import { site } from '../data/site';
+---
+
+<section class="section wrap" id="toolbox">
+  <p class="eyebrow">Toolbox</p>
+  <h2 class="h2" data-scramble>What I work with</h2>
+  <div class="grid" data-stagger>
+    {
+      site.toolbox.map((g, i) => (
+        <div class="card group">
+          <p class="idx mono">0{i + 1}</p>
+          <h3>{g.group}</h3>
+          <ul>
+            {g.items.map((t) => (
+              <li class="chip">{t}</li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .h2 {
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .group {
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Pointer-following glow, set from the script below */
+  .group::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(240px circle at var(--x, -100px) var(--y, -100px), color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
+    pointer-events: none;
+  }
+  .idx {
+    font-size: 0.75rem;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  h3 {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  @media (max-width: 1000px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('#toolbox .group').forEach((el) =>
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--x', `${e.clientX - r.left}px`);
+      el.style.setProperty('--y', `${e.clientY - r.top}px`);
+    }),
+  );
+</script>
