@@ -37,6 +37,7 @@ const url = new URL(base, Astro.site);
         } catch {}
         if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
         document.documentElement.dataset.theme = t;
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js');
       })();
     </script>
   </head>

@@ -226,3 +226,23 @@ p {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Hidden until motion.ts animates them in; failsafe shows them if scripts never run. */
+.js [data-intro] {
+  opacity: 0;
+  animation: failsafe-in 0.4s 3s forwards;
+}
+.js [data-intro-name] {
+  visibility: hidden;
+  animation: failsafe-vis 0s 3s forwards;
+}
+@keyframes failsafe-in {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes failsafe-vis {
+  to {
+    visibility: visible;
+  }
+}

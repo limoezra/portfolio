@@ -1,10 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
 import { hornPaths } from '../data/horn';
+
 const horn = JSON.stringify(hornPaths().map((c) => c.d));
 ---
 
 <Base>
-  <main><h1>Ezra Kiplimo</h1></main>
+  <a class="sr-only" href="#main">Skip to content</a>
+  <Nav />
+  <main id="main">
+    <Hero />
+    <About />
+  </main>
   <script type="application/json" id="horn" set:html={horn} />
 </Base>
